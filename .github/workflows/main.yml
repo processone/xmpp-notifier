@@ -42,7 +42,7 @@ jobs:
       - name: pr_open_info_step
         # Will only get triggered when a pull request to master is created
         if: github.event_name == 'pull_request' && github.event.action == 'opened'
-        with: # Set the secrets as inputs
+        env: # Set the secrets as inputs
           login: ${{ secrets.bot_username }}
           pass: ${{ secrets.bot_password }}
           server_domain: ${{ secrets.server_rooms_domain }}
@@ -56,7 +56,7 @@ jobs:
       - name: pr_edit_info_step
         # Will only get triggered when a pull request to master is created
         if: github.event_name == 'pull_request' && github.event.action == 'edited'
-        with: # Set the secrets as inputs
+        env: # Set the secrets as inputs
           login: ${{ secrets.bot_username }}
           pass: ${{ secrets.bot_password }}
           server_domain: ${{ secrets.server_rooms_domain }}
