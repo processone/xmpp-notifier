@@ -20,6 +20,8 @@ jobs:
       - name: Run tests
         run: |
               go test ./... -v -race -coverprofile cover.out -covermode=atomic
+      - name: Checkout
+        uses: actions/checkout@v2
       - name: Tests fail notif
         if: failure()
         id: test_fail_notif
@@ -39,8 +41,6 @@ jobs:
              tests for the following commit have failed : ${{ github.event.pull_request.html_url }}
           # Boolean to indicate if correspondent should be treated as a room (true) or a single user
           correspondent_is_room: true
-      - name: Checkout
-        uses: actions/checkout@v2
       - name: push_info_step
         id: push
         uses: ./
