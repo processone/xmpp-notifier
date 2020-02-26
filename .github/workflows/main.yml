@@ -11,6 +11,15 @@ jobs:
     runs-on: ubuntu-latest
     name: workflow that pushes repo news to xmpp server
     steps:
+      - name: Set up Go 1.13
+        uses: actions/setup-go@v1
+        with:
+         go-version: 1.13
+        id: go
+      - uses: actions/checkout@v1
+      - name: Run tests
+        run: |
+              go test ./... -v -race -coverprofile cover.out -covermode=atomic
       - name: Checkout
         uses: actions/checkout@v2
       - name: push_info_step
@@ -49,6 +58,20 @@ jobs:
             ${{ github.event.pull_request.title }}
           correspondent_is_room: true
       - name: pr_edit_info_step
+        id: pull_request_edit
+        uses: ./
+        # Will only get triggered when a pull request to master is created
+        if: github.event_name == 'pull_request' && github.event.action == 'edited'
+        with: # Set the secrets as inputs
+          login: ${{ secrets.bot_username }}
+          pass: ${{ secrets.bot_password }}
+          server_domain: ${{ secrets.server_rooms_domain }}
+          correspondant: ${{ secrets.room_correspondent }}
+          message: |
+            ${{ github.actor }} edited the following PR : ${{ github.event.pull_request.html_url }} with message :
+            ${{ github.event.pull_request.title }}
+          correspondent_is_room: true
+      - name: _info_step
         id: pull_request_edit
         uses: ./
         # Will only get triggered when a pull request to master is created
