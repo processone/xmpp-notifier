@@ -45,5 +45,5 @@ jobs:
           server_domain: ${{ secrets.server_rooms_domain }}
           correspondant: ${{ secrets.room_correspondent }}
           message: |
-            ${{ github.actor }} opened a PR : ${{ github.event.ref }} ${{ github.event.compare }}
+            ${{ github.actor }} opened a PR ${{ github.event.pull_request.html_url }}
           correspondent_is_room: true
