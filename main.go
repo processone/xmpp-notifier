@@ -48,6 +48,7 @@ func main() {
 
 	err = client.Connect()
 	if err != nil {
+		fmt.Println(port[:len(port)-1])
 		panic(err)
 	}
 
