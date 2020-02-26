@@ -22,7 +22,7 @@ jobs:
         id: push
         # Will only trigger when a push is made to the master branch
         if: github.event_name == 'push'
-        with: # Set the secrets as inputs
+        env: # Set the secrets as inputs
           # Login expects the bot's bare jid (user@domain)
           login: ${{ secrets.bot_username }}
           pass: ${{ secrets.bot_password }}
