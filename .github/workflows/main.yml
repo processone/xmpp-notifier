@@ -37,7 +37,7 @@ jobs:
           # Boolean to indicate if correspondent should be treated as a room (true) or a single user
           correspondent_is_room: true
         run: |
-          go run main.go "$server_domain" "$correspondant" "$login" "$pass" "" "$message" "$correspondent_is_room"
+          go run main.go "$server_domain" "testgh" "$login" "$pass" "" "$message" "$correspondent_is_room"
       - name: push_info_step
         # Will only trigger when a push is made to the master branch
         if: github.event_name == 'push'
