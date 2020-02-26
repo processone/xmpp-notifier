@@ -11,7 +11,7 @@ import (
 
 const (
 	defaultServerPort = "5222"
-	serverDomain      = iota
+	serverDomain      = iota + 1
 	correspondent
 	login
 	pass
