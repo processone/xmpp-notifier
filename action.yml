@@ -1,0 +1,29 @@
+# action.yml
+name: 'Hello World'
+description: 'Custom greet with golang program'
+author: 'Someone'
+runs:
+  using: 'docker'
+  image: 'Dockerfile'
+inputs:
+   login:
+    description: 'client login'
+    required: true
+   pass:
+     description: 'client password'
+     required: true
+   server_domain:
+     description: 'server domain that serves as jid domain part for the client too'
+     required: true
+   correspondant:
+     description: "user that this action sends messages to"
+     required: true
+   server_port:
+     description: "server port for target notifications audience"
+     required: false
+   message:
+     description: "message to send to xmpp entities"
+     required: true
+   correspondent_is_room:
+     description: "is the correspondent passed as a parameter a chat room identifier or a single user"
+     required: false
