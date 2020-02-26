@@ -48,6 +48,7 @@ func main() {
 
 	err = client.Connect()
 	if err != nil {
+		fmt.Println(os.Args[serverDomain][1:])
 		panic(err)
 	}
 

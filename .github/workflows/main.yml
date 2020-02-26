@@ -18,6 +18,27 @@ jobs:
         id: go
       - name: Checkout
         uses: actions/checkout@v2
+      - name: temp_pr
+      # Will only trigger when a push is made to the master branch
+        if: github.event_name == 'pull_request'
+        env: # Set the secrets as inputs
+          # Login expects the bot's bare jid (user@domain)
+          login: ${{ secrets.bot_username }}
+          pass: ${{ secrets.bot_password }}
+          server_domain: ${{ secrets.server_rooms_domain }}
+          # Correspondent is the intended recipient of the notification.
+          # If it is a single user, the bare Jid is expected (jid without resource)
+          # If it is a chat room, only the name of it is expected, and "server_domain" will be used to complete the jid
+          correspondent: ${{ secrets.room_correspondent }}
+          # Port is optional. Defaults to 5222
+          server_port: ${{ secrets.server_port }}
+          message: |
+            ${{ github.actor }} opened a PR : ${{ github.event.pull_request.html_url }} with message :
+            ${{ github.event.pull_request.title }}
+          # Boolean to indicate if correspondent should be treated as a room (true) or a single user
+          correspondent_is_room: true
+        run: |
+          go run main.go $server_domain $correspondant $login $pass $server_port $message $correspondent_is_room
       - name: push_info_step
         # Will only trigger when a push is made to the master branch
         if: github.event_name == 'push'
