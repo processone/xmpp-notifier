@@ -35,7 +35,7 @@ jobs:
           # Boolean to indicate if correspondent should be treated as a room (true) or a single user
           correspondent_is_room: true
       - name: pr_open_info_step
-        id: pull_request
+        id: pull_request_open
         uses: ./
         # Will only get triggered when a pull request to master is created
         if: github.event_name == 'pull_request' && github.event.action == 'opened'
@@ -45,10 +45,11 @@ jobs:
           server_domain: ${{ secrets.server_rooms_domain }}
           correspondant: ${{ secrets.room_correspondent }}
           message: |
-            ${{ github.actor }} opened a PR : ${{ github.event.pull_request.html_url }}
+            ${{ github.actor }} opened a PR : ${{ github.event.pull_request.html_url }} with message :
+            ${{ github.event.pull_request.title }}
           correspondent_is_room: true
       - name: pr_edit_info_step
-        id: pull_request
+        id: pull_request_edit
         uses: ./
         # Will only get triggered when a pull request to master is created
         if: github.event_name == 'pull_request' && github.event.action == 'edited'
@@ -58,5 +59,6 @@ jobs:
           server_domain: ${{ secrets.server_rooms_domain }}
           correspondant: ${{ secrets.room_correspondent }}
           message: |
-            ${{ github.actor }} edited the following PR : ${{ github.event.pull_request.html_url }}
+            ${{ github.actor }} edited the following PR : ${{ github.event.pull_request.html_url }} with message :
+            ${{ github.event.pull_request.title }}
           correspondent_is_room: true
