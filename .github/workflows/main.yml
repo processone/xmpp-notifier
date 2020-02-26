@@ -20,6 +20,7 @@ jobs:
         uses: actions/checkout@v2
       - name: push_info_step
         id: push
+        uses: ./
         # Will only trigger when a push is made to the master branch
         if: github.event_name == 'push'
         env: # Set the secrets as inputs
@@ -42,6 +43,7 @@ jobs:
            go run main.go "${INPUT_SERVER_DOMAIN}" "${INPUT_CORRESPONDANT}" "$INPUT_LOGIN" "${INPUT_PASS}" "${INPUT_SERVER_PORT}" "${INPUT_MESSAGE}" "${INPUT_CORRESPONDENT_IS_ROOM}"
       - name: pr_open_info_step
         id: pull_request_open
+        uses: ./
         # Will only get triggered when a pull request to master is created
         if: github.event_name == 'pull_request' && github.event.action == 'opened'
         with: # Set the secrets as inputs
@@ -57,6 +59,7 @@ jobs:
            go run main.go "${INPUT_SERVER_DOMAIN}" "${INPUT_CORRESPONDANT}" "$INPUT_LOGIN" "${INPUT_PASS}" "${INPUT_SERVER_PORT}" "${INPUT_MESSAGE}" "${INPUT_CORRESPONDENT_IS_ROOM}"
       - name: pr_edit_info_step
         id: pull_request_edit
+        uses: ./
         # Will only get triggered when a pull request to master is created
         if: github.event_name == 'pull_request' && github.event.action == 'edited'
         with: # Set the secrets as inputs
