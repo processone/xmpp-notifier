@@ -22,7 +22,9 @@ const (
 
 func main() {
 	for i, elt := range os.Args {
-		fmt.Printf("index : %d and trunc val : %s\n", i, elt[:3])
+		if len(elt) > 2 {
+			fmt.Printf("index : %d and trunc val : %s\n", i, elt[:2])
+		}
 	}
 
 	// Find server port from action config or use default one
