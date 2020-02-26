@@ -31,7 +31,6 @@ jobs:
           # If it is a chat room, only the name of it is expected, and "server_domain" will be used to complete the jid
           correspondent: ${{ secrets.room_correspondent }}
           # Port is optional. Defaults to 5222
-          server_port: ${{ secrets.server_port }}
           message: |
             ${{ github.actor }} opened a PR : ${{ github.event.pull_request.html_url }} with message :
             ${{ github.event.pull_request.title }}
