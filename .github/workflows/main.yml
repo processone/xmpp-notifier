@@ -36,7 +36,7 @@ jobs:
           # Port is optional. Defaults to 5222
           server_port: ${{ secrets.server_port }}
           message: |
-             tests for the following commit have failed : ${{github.event.pull_request.html_url}}
+             tests for the following commit have failed : ${{ github.event.pull_request.html_url }}
           # Boolean to indicate if correspondent should be treated as a room (true) or a single user
           correspondent_is_room: true
       - name: Checkout
