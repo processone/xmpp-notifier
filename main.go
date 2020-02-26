@@ -26,10 +26,7 @@ func main() {
 	if os.Args[serverPort] == "" {
 		port = defaultServerPort
 	} else {
-		port, err := strconv.ParseInt(os.Args[serverPort], 10, 0)
-		if err != nil {
-			panic(err)
-		}
+		port = os.Args[serverPort]
 	}
 
 	// Build client and connect to server
