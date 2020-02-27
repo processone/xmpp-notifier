@@ -12,7 +12,7 @@ jobs:
     name: workflow that pushes repo news to xmpp server
     steps:
       - name: Checkout
-          uses: actions/checkout@v2
+        uses: actions/checkout@v2
       - name: Run tests
         run: |
               go test ./... -v -race -coverprofile cover.out -covermode=atomic
