@@ -75,3 +75,46 @@ This script uses inputs from the github action.
 ## main.go
 A small go program that will be compiled and ran in the docker container when the github action is executed.  
 It uses the [native go-xmpp library](https://github.com/FluuxIO/go-xmpp).
+
+## Example of configuration to trigger notifications on tests failure for a PR
+
+```yaml
+jobs:
+  notif-script:
+    runs-on: ubuntu-latest
+    name: workflow that pushes test failures to xmpp server
+    steps:
+      # Checkout your project, then run tests in the following step.
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Run tests
+        run: |
+          go test ./... -v -race
+      - name: Checkout action if tests failed
+        if: failure() # If tests fail, let's pull the action in and start it 
+        uses: actions/checkout@v2
+        with:
+          repository: processone/xmpp-notifier
+      - name: Tests failed notif
+        # Now that the action is here, start it.
+        # Apparently github considers the "failure()" should return true if *any* of the previous steps fail
+        # Even if the doc seem to say "only if the previous step fails" (https://help.github.com/en/actions/reference/contexts-and-expression-syntax-for-github-actions#job-status-check-functions)
+        if: failure()  
+        id: test_fail_notif
+        uses: ./
+        with: # Set the secrets as inputs
+          # Login expects the bot's bare jid (user@domain)
+          login: ${{ secrets.bot_username }}
+          pass: ${{ secrets.bot_password }}
+          server_domain: ${{ secrets.server_rooms_domain }}
+          # Correspondent is the intended recipient of the notification.
+          # If it is a single user, the bare Jid is expected (jid without resource)
+          # If it is a chat room, only the name of it is expected, and "server_domain" will be used to complete the jid
+          correspondant: ${{ secrets.room_correspondent }}
+          # Port is optional. Defaults to 5222
+          server_port: ${{ secrets.server_port }}
+          message: |
+            tests for the following PR have failed : ${{ github.event.pull_request.html_url }}
+          # Boolean to indicate if correspondent should be treated as a room (true) or a single user
+          correspondent_is_room: true
+```
