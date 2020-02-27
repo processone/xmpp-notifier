@@ -13,6 +13,28 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+      - name: Run tests
+        run: |
+              go test ./... -v -race -coverprofile cover.out -covermode=atomic
+      - name: Tests fail notif
+        if: failure()
+        id: test_fail_notif
+        uses: ./
+        with: # Set the secrets as inputs
+          # Login expects the bot's bare jid (user@domain)
+          login: ${{ secrets.bot_username }}
+          pass: ${{ secrets.bot_password }}
+          server_domain: ${{ secrets.server_rooms_domain }}
+          # Correspondent is the intended recipient of the notification.
+          # If it is a single user, the bare Jid is expected (jid without resource)
+          # If it is a chat room, only the name of it is expected, and "server_domain" will be used to complete the jid
+          correspondant: ${{ secrets.room_correspondent }}
+          # Port is optional. Defaults to 5222
+          server_port: ${{ secrets.server_port }}
+          message: |
+             tests for the following commit have failed : ${{ github.event.pull_request.html_url }}
+          # Boolean to indicate if correspondent should be treated as a room (true) or a single user
+          correspondent_is_room: true
       - name: push_info_step
         id: push
         uses: ./
