@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"gosrc.io/xmpp"
 	"gosrc.io/xmpp/stanza"
 	"log"
@@ -23,6 +24,12 @@ const (
 )
 
 func main() {
+	for i, elt := range os.Args {
+		if len(elt) > 2 {
+			fmt.Printf("idx : %d, and : %s", i, elt[:2])
+		}
+	}
+
 	// Find server port from action config or use default one
 	var port string
 	if strings.TrimSpace(os.Args[serverPort]) == "" {
