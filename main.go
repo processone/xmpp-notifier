@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"gosrc.io/xmpp"
 	"gosrc.io/xmpp/stanza"
 	"log"
@@ -24,7 +23,6 @@ const (
 )
 
 func main() {
-	fmt.Println("test : " + os.Args[password][:2])
 	// Find server port from action config or use default one
 	var port string
 	if strings.TrimSpace(os.Args[serverPort]) == "" {
