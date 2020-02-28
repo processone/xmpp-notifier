@@ -10,9 +10,7 @@ import (
 )
 
 const (
-	defaultServerPort = "5222"
-	defaultBotAlias   = "/github_bot"
-	serverDomain      = iota
+	serverDomain = iota + 1
 	recipient
 	jid
 	password
@@ -20,6 +18,9 @@ const (
 	message
 	recipientIsRoom
 	botAlias
+
+	defaultServerPort = "5222"
+	defaultBotAlias   = "/github_bot"
 )
 
 func main() {
