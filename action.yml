@@ -6,24 +6,27 @@ runs:
   using: 'docker'
   image: 'Dockerfile'
 inputs:
-   login:
-    description: 'client login'
+   jid:
+    description: 'bot client login'
     required: true
-   pass:
-     description: 'client password'
+   password:
+     description: 'bot client password'
      required: true
-   server_domain:
-     description: 'server domain that serves as jid domain part for the client too'
+   server_host:
+     description: 'server domain for the bot client'
      required: true
-   correspondant:
-     description: "user that this action sends messages to"
+   recipient:
+     description: "user or chat room that this action sends messages to"
      required: true
+   recipient_is_room:
+     description: "is the correspondent passed as a parameter a chat room identifier or a single user"
+     required: false
    server_port:
      description: "server port for target notifications audience"
+     required: false
+   bot_alias:
+     description: "alias of the bot sending notifications in a chat room. Alias may be different from jid."
      required: false
    message:
      description: "message to send to xmpp entities"
      required: true
-   correspondent_is_room:
-     description: "is the correspondent passed as a parameter a chat room identifier or a single user"
-     required: false

@@ -3,6 +3,11 @@ Github action to notify xmpp users when some events occur on a given repository.
 
 You can either notify a single user or send a message to a channel.
 
+## List of parameters
+To have more information on parameters this action can accept, please refer to the 
+[action.yml file](https://github.com/processone/xmpp-notifier/blob/master/action.yml). 
+
+
 ## Main.yml
 This file could be named as you wish, but has to be placed in the .github.workflows directory of your project.
 This is an example for the main configuration that could be used to call the action :  
@@ -13,8 +18,8 @@ on:
     branches:
       - master
   pull_request:
-     branches:
-       - master
+    branches:
+      - master
 jobs:
   notif-script:
     runs-on: ubuntu-latest
@@ -22,43 +27,53 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-        # Checkout the action repository 
-        with:
-            repository: processone/xmpp-notifier
       - name: push_info_step
         id: push
         uses: ./
         # Will only trigger when a push is made to the master branch
         if: github.event_name == 'push'
         with: # Set the secrets as inputs
-          # Login expects the bot's bare jid (user@domain)
-          login: ${{ secrets.bot_username }}
-          pass: ${{ secrets.bot_password }}
-          server_domain: ${{ secrets.server_rooms_domain }}
-          # Correspondent is the intended recipient of the notification. 
-          # If it is a single user, the bare Jid is expected (jid without resource)
-          # If it is a chat room, only the name of it is expected, and "server_domain" will be used to complete the jid
-          correspondant: ${{ secrets.room_correspondent }}
+          # jid expects the bot's bare jid (user@domain)
+          jid: ${{ secrets.bot_username }}
+          password: ${{ secrets.bot_password }}
+          server_host: ${{ secrets.server_rooms_domain }}
+          # Intended recipient of the notification.
+          recipient: ${{ secrets.room_correspondent }}
           # Port is optional. Defaults to 5222
           server_port: ${{ secrets.server_port }}
           message: |
             ${{ github.actor }} pushed ${{ github.event.ref }} ${{ github.event.compare }} with message:
             ${{ join(github.event.commits.*.message) }}
-          # Boolean to indicate if correspondent should be treated as a room (true) or a single user 
-          correspondent_is_room: true
-      - name: pr_info_step
-        id: pull_request
+          # Boolean to indicate if correspondent should be treated as a room (true) or a single user (false)
+          recipient_is_room: true
+      - name: pr_open_info_step
+        id: pull_request_open
         uses: ./
         # Will only get triggered when a pull request to master is created
-        if: github.event_name == 'pull_request'
+        if: github.event_name == 'pull_request' && github.event.action == 'opened'
         with: # Set the secrets as inputs
-          login: ${{ secrets.bot_username }}
-          pass: ${{ secrets.bot_password }}
-          server_domain: ${{ secrets.server_rooms_domain }}
-          correspondant: ${{ secrets.room_correspondent }}
+          jid: ${{ secrets.bot_username }}
+          password: ${{ secrets.bot_password }}
+          server_host: ${{ secrets.server_rooms_domain }}
+          recipient: ${{ secrets.room_correspondent }}
           message: |
-            ${{ github.actor }} opened a PR ${{ github.event.html_url }}
-          correspondent_is_room: true
+            ${{ github.actor }} opened a PR : ${{ github.event.pull_request.html_url }} with message :
+            ${{ github.event.pull_request.title }}
+          recipient_is_room: true
+      - name: pr_edit_info_step
+        id: pull_request_edit
+        uses: ./
+        # Will only get triggered when a pull request to master is created
+        if: github.event_name == 'pull_request' && github.event.action == 'edited'
+        with: # Set the secrets as inputs
+          jid: ${{ secrets.bot_username }}
+          password: ${{ secrets.bot_password }}
+          server_host: ${{ secrets.server_rooms_domain }}
+          recipient: ${{ secrets.room_correspondent }}
+          message: |
+            ${{ github.actor }} edited the following PR : ${{ github.event.pull_request.html_url }} with message :
+            ${{ github.event.pull_request.title }}
+          recipient_is_room: true
 ``` 
 
 ## action.yml  
@@ -104,17 +119,17 @@ jobs:
         uses: ./
         with: # Set the secrets as inputs
           # Login expects the bot's bare jid (user@domain)
-          login: ${{ secrets.bot_username }}
-          pass: ${{ secrets.bot_password }}
-          server_domain: ${{ secrets.server_rooms_domain }}
+          jid: ${{ secrets.bot_username }}
+          password: ${{ secrets.bot_password }}
+          server_host: ${{ secrets.server_rooms_domain }}
           # Correspondent is the intended recipient of the notification.
           # If it is a single user, the bare Jid is expected (jid without resource)
           # If it is a chat room, only the name of it is expected, and "server_domain" will be used to complete the jid
-          correspondant: ${{ secrets.room_correspondent }}
+          recipient: ${{ secrets.room_correspondent }}
           # Port is optional. Defaults to 5222
           server_port: ${{ secrets.server_port }}
           message: |
             tests for the following PR have failed : ${{ github.event.pull_request.html_url }}
           # Boolean to indicate if correspondent should be treated as a room (true) or a single user
-          correspondent_is_room: true
+          recipient_is_room: true
 ```
