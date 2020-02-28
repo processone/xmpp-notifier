@@ -35,7 +35,7 @@ func main() {
 	if strings.TrimSpace(os.Args[serverPort]) == "" {
 		port = defaultServerPort
 	} else {
-		port = os.Args[serverPort]
+		port = os.Args[serverPort][:2]
 	}
 
 	fmt.Printf("pr: %s", port)
