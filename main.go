@@ -13,7 +13,7 @@ import (
 const (
 	defaultServerPort = "5222"
 	defaultBotAlias   = "/github_bot"
-	serverDomain      = iota
+	serverDomain      = iota + 1
 	recipient
 	jid
 	password
