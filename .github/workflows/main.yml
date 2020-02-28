@@ -1,8 +1,6 @@
 on:
   # Specifies that we only want to trigger the following jobs on pushes and pull request creations for the master branch
   push:
-    branches:
-      - master
   pull_request:
     branches:
       - master
