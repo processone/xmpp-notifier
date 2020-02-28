@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"gosrc.io/xmpp"
 	"gosrc.io/xmpp/stanza"
 	"log"
@@ -11,7 +10,7 @@ import (
 )
 
 const (
-	serverDomain = iota
+	serverDomain = iota + 1
 	recipient
 	jid
 	password
@@ -25,20 +24,14 @@ const (
 )
 
 func main() {
-	fmt.Printf("p : %d", serverDomain)
-	fmt.Printf("p : %d", recipient)
-	fmt.Printf("p : %d", jid)
-	fmt.Printf("p : %d", password)
-
 	// Find server port from action config or use default one
 	var port string
 	if strings.TrimSpace(os.Args[serverPort]) == "" {
 		port = defaultServerPort
 	} else {
-		port = os.Args[serverPort][:2]
+		port = os.Args[serverPort]
 	}
 
-	fmt.Printf("pr: %s", port)
 	// Build client and connect to server
 	config := xmpp.Config{
 		TransportConfiguration: xmpp.TransportConfiguration{
