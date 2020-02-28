@@ -38,6 +38,7 @@ func main() {
 		port = os.Args[serverPort]
 	}
 
+	fmt.Printf("pr: %s", port)
 	// Build client and connect to server
 	config := xmpp.Config{
 		TransportConfiguration: xmpp.TransportConfiguration{
