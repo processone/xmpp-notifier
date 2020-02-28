@@ -13,7 +13,7 @@ import (
 const (
 	defaultServerPort = "5222"
 	defaultBotAlias   = "/github_bot"
-	serverDomain      = iota + 1
+	serverDomain      = iota
 	recipient
 	jid
 	password
@@ -24,7 +24,9 @@ const (
 )
 
 func main() {
-
+	fmt.Printf("p : %d", serverDomain)
+	fmt.Printf("p : %d", recipient)
+	fmt.Printf("p : %d", jid)
 	fmt.Printf("p : %d", password)
 
 	// Find server port from action config or use default one
