@@ -18,45 +18,42 @@ jobs:
         if: github.event_name == 'push'
         with: # Set the secrets as inputs
           # Login expects the bot's bare jid (user@domain)
-          login: ${{ secrets.bot_username }}
-          pass: ${{ secrets.bot_password }}
-          server_domain: ${{ secrets.server_rooms_domain }}
-          # Correspondent is the intended recipient of the notification.
-          # If it is a single user, the bare Jid is expected (jid without resource)
-          # If it is a chat room, only the name of it is expected, and "server_domain" will be used to complete the jid
-          correspondant: ${{ secrets.room_correspondent }}
+          jid: ${{ secrets.bot_username }}
+          password: ${{ secrets.bot_password }}
+          server_host: ${{ secrets.server_rooms_domain }}
+          recipient: ${{ secrets.room }}
           # Port is optional. Defaults to 5222
           server_port: ${{ secrets.server_port }}
           message: |
             ${{ github.actor }} pushed ${{ github.event.ref }} ${{ github.event.compare }} with message:
             ${{ join(github.event.commits.*.message) }}
           # Boolean to indicate if correspondent should be treated as a room (true) or a single user
-          correspondent_is_room: true
+          recipient_is_room: true
       - name: pr_open_info_step
         id: pull_request_open
         uses: processone/xmpp-notifier@remove_checkout
         # Will only get triggered when a pull request to master is created
         if: github.event_name == 'pull_request' && github.event.action == 'opened'
         with: # Set the secrets as inputs
-          login: ${{ secrets.bot_username }}
-          pass: ${{ secrets.bot_password }}
-          server_domain: ${{ secrets.server_rooms_domain }}
-          correspondant: ${{ secrets.room_correspondent }}
+          jid: ${{ secrets.bot_username }}
+          password: ${{ secrets.bot_password }}
+          server_host: ${{ secrets.server_rooms_domain }}
+          recipient: ${{ secrets.room }}
           message: |
             ${{ github.actor }} opened a PR : ${{ github.event.pull_request.html_url }} with message :
             ${{ github.event.pull_request.title }}
-          correspondent_is_room: true
+          recipient_is_room: true
       - name: pr_edit_info_step
         id: pull_request_edit
         uses: processone/xmpp-notifier@remove_checkout
         # Will only get triggered when a pull request to master is created
         if: github.event_name == 'pull_request' && github.event.action == 'edited'
         with: # Set the secrets as inputs
-          login: ${{ secrets.bot_username }}
-          pass: ${{ secrets.bot_password }}
-          server_domain: ${{ secrets.server_rooms_domain }}
-          correspondant: ${{ secrets.room_correspondent }}
+          jid: ${{ secrets.bot_username }}
+          password: ${{ secrets.bot_password }}
+          server_host: ${{ secrets.server_rooms_domain }}
+          recipient: ${{ secrets.room }}
           message: |
             ${{ github.actor }} edited the following PR : ${{ github.event.pull_request.html_url }} with message :
             ${{ github.event.pull_request.title }}
-          correspondent_is_room: true
+          recipient_is_room: true
