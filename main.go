@@ -24,10 +24,6 @@ const (
 )
 
 func main() {
-	for idx, elt := range os.Args {
-		log.Printf("s : %s, at : %d", elt[:2], idx)
-	}
-
 	// Find server port from action config or use default one
 	var port string
 	if strings.TrimSpace(os.Args[serverPort]) == "" {
