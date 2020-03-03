@@ -25,11 +25,9 @@ jobs:
     runs-on: ubuntu-latest
     name: workflow that pushes repo news to xmpp server
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
       - name: push_info_step
         id: push
-        uses: ./
+        uses: processone/xmpp-notifier@master
         # Will only trigger when a push is made to the master branch
         if: github.event_name == 'push'
         with: # Set the secrets as inputs
@@ -48,7 +46,7 @@ jobs:
           recipient_is_room: true
       - name: pr_open_info_step
         id: pull_request_open
-        uses: ./
+        uses: processone/xmpp-notifier@master
         # Will only get triggered when a pull request to master is created
         if: github.event_name == 'pull_request' && github.event.action == 'opened'
         with: # Set the secrets as inputs
@@ -62,7 +60,7 @@ jobs:
           recipient_is_room: true
       - name: pr_edit_info_step
         id: pull_request_edit
-        uses: ./
+        uses: processone/xmpp-notifier@master
         # Will only get triggered when a pull request to master is created
         if: github.event_name == 'pull_request' && github.event.action == 'edited'
         with: # Set the secrets as inputs
@@ -99,24 +97,16 @@ jobs:
     runs-on: ubuntu-latest
     name: workflow that pushes test failures to xmpp server
     steps:
-      # Checkout your project, then run tests in the following step.
-      - name: Checkout
-        uses: actions/checkout@v2
       - name: Run tests
         run: |
           go test ./... -v -race
-      - name: Checkout action if tests failed
-        if: failure() # If tests fail, let's pull the action in and start it 
-        uses: actions/checkout@v2
-        with:
-          repository: processone/xmpp-notifier
       - name: Tests failed notif
         # Now that the action is here, start it.
         # Apparently github considers the "failure()" should return true if *any* of the previous steps fail
         # Even if the doc seem to say "only if the previous step fails" (https://help.github.com/en/actions/reference/contexts-and-expression-syntax-for-github-actions#job-status-check-functions)
         if: failure()  
         id: test_fail_notif
-        uses: ./
+        uses: processone/xmpp-notifier@master
         with: # Set the secrets as inputs
           # Login expects the bot's bare jid (user@domain)
           jid: ${{ secrets.bot_username }}
