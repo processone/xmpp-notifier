@@ -1,21 +1,13 @@
 on:
-  # Specifies that we only want to trigger the following jobs on pushes and pull request creations for the master branch
-  push:
-    branches:
-      - master
-  pull_request:
-    branches:
-      - master
+  [push, pull_request]
 jobs:
   notif-script:
     runs-on: ubuntu-latest
     name: workflow that pushes repo news to xmpp server
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
       - name: push_info_step
         id: push
-        uses: ./
+        uses: processone/xmpp-notifier@remove-checkout-from-wf
         # Will only trigger when a push is made to the master branch
         if: github.event_name == 'push'
         with: # Set the secrets as inputs
@@ -33,7 +25,7 @@ jobs:
           recipient_is_room: true
       - name: pr_open_info_step
         id: pull_request_open
-        uses: ./
+        uses: processone/xmpp-notifier@remove-checkout-from-wf
         # Will only get triggered when a pull request to master is created
         if: github.event_name == 'pull_request' && github.event.action == 'opened'
         with: # Set the secrets as inputs
@@ -47,7 +39,7 @@ jobs:
           recipient_is_room: true
       - name: pr_edit_info_step
         id: pull_request_edit
-        uses: ./
+        uses: processone/xmpp-notifier@remove-checkout-from-wf
         # Will only get triggered when a pull request to master is created
         if: github.event_name == 'pull_request' && github.event.action == 'edited'
         with: # Set the secrets as inputs
