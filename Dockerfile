@@ -6,4 +6,4 @@ COPY entrypoint.sh /notifier/entrypoint.sh
 COPY main.go /notifier/main.go
 
 # Code file to execute when the docker container starts up (`entrypoint.sh`)
-ENTRYPOINT ["/entrypoint.sh"]
+ENTRYPOINT ["/notifier/entrypoint.sh"]
