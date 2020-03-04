@@ -35,7 +35,7 @@ jobs:
           jid: ${{ secrets.jid }}
           password: ${{ secrets.password }}
           server_host: ${{ secrets.server_host }}
-          # Intended recipient of the notification.
+          # Intended recipient of the notification such as a room or single user. Bare JID expected.
           recipient: ${{ secrets.recipient }}
           # Port is optional. Defaults to 5222
           server_port: ${{ secrets.server_port }}
@@ -101,9 +101,6 @@ jobs:
         run: |
           go test ./... -v -race
       - name: Tests failed notif
-        # Now that the action is here, start it.
-        # Apparently github considers the "failure()" should return true if *any* of the previous steps fail
-        # Even if the doc seem to say "only if the previous step fails" (https://help.github.com/en/actions/reference/contexts-and-expression-syntax-for-github-actions#job-status-check-functions)
         if: failure()  
         id: test_fail_notif
         uses: processone/xmpp-notifier@master
@@ -112,9 +109,7 @@ jobs:
           jid: ${{ secrets.jid }}
           password: ${{ secrets.password }}
           server_host: ${{ secrets.server_host }}
-          # Correspondent is the intended recipient of the notification.
-          # If it is a single user, the bare Jid is expected (jid without resource)
-          # If it is a chat room, only the name of it is expected, and "server_domain" will be used to complete the jid
+          # The intended recipient of the notification such as a xmpp room or a single user. Bare JID is expected
           recipient: ${{ secrets.recipient }}
           # Port is optional. Defaults to 5222
           server_port: ${{ secrets.server_port }}
