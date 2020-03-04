@@ -32,11 +32,11 @@ jobs:
         if: github.event_name == 'push'
         with: # Set the secrets as inputs
           # jid expects the bot's bare jid (user@domain)
-          jid: ${{ secrets.bot_username }}
-          password: ${{ secrets.bot_password }}
-          server_host: ${{ secrets.server_rooms_domain }}
+          jid: ${{ secrets.jid }}
+          password: ${{ secrets.password }}
+          server_host: ${{ secrets.server_host }}
           # Intended recipient of the notification.
-          recipient: ${{ secrets.room_correspondent }}
+          recipient: ${{ secrets.recipient }}
           # Port is optional. Defaults to 5222
           server_port: ${{ secrets.server_port }}
           message: |
@@ -50,10 +50,10 @@ jobs:
         # Will only get triggered when a pull request to master is created
         if: github.event_name == 'pull_request' && github.event.action == 'opened'
         with: # Set the secrets as inputs
-          jid: ${{ secrets.bot_username }}
-          password: ${{ secrets.bot_password }}
-          server_host: ${{ secrets.server_rooms_domain }}
-          recipient: ${{ secrets.room_correspondent }}
+          jid: ${{ secrets.jid }}
+          password: ${{ secrets.password }}
+          server_host: ${{ secrets.server_host }}
+          recipient: ${{ secrets.recipient }}
           message: |
             ${{ github.actor }} opened a PR : ${{ github.event.pull_request.html_url }} with message :
             ${{ github.event.pull_request.title }}
@@ -64,10 +64,10 @@ jobs:
         # Will only get triggered when a pull request to master is created
         if: github.event_name == 'pull_request' && github.event.action == 'edited'
         with: # Set the secrets as inputs
-          jid: ${{ secrets.bot_username }}
-          password: ${{ secrets.bot_password }}
-          server_host: ${{ secrets.server_rooms_domain }}
-          recipient: ${{ secrets.room_correspondent }}
+          jid: ${{ secrets.jid }}
+          password: ${{ secrets.password }}
+          server_host: ${{ secrets.server_host }}
+          recipient: ${{ secrets.recipient }}
           message: |
             ${{ github.actor }} edited the following PR : ${{ github.event.pull_request.html_url }} with message :
             ${{ github.event.pull_request.title }}
@@ -109,13 +109,13 @@ jobs:
         uses: processone/xmpp-notifier@master
         with: # Set the secrets as inputs
           # Login expects the bot's bare jid (user@domain)
-          jid: ${{ secrets.bot_username }}
-          password: ${{ secrets.bot_password }}
-          server_host: ${{ secrets.server_rooms_domain }}
+          jid: ${{ secrets.jid }}
+          password: ${{ secrets.password }}
+          server_host: ${{ secrets.server_host }}
           # Correspondent is the intended recipient of the notification.
           # If it is a single user, the bare Jid is expected (jid without resource)
           # If it is a chat room, only the name of it is expected, and "server_domain" will be used to complete the jid
-          recipient: ${{ secrets.room_correspondent }}
+          recipient: ${{ secrets.recipient }}
           # Port is optional. Defaults to 5222
           server_port: ${{ secrets.server_port }}
           message: |
