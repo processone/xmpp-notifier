@@ -23,7 +23,7 @@ on:
 jobs:
   notif-script:
     runs-on: ubuntu-latest
-    name: job that pushes repo news to xmpp server
+    name: job that pushes repo news to xmpp
     steps:
       - name: push_info_step
         id: push
@@ -95,7 +95,7 @@ It uses the [native go-xmpp library](https://github.com/FluuxIO/go-xmpp).
 jobs:
   notif-script:
     runs-on: ubuntu-latest
-    name: job that pushes test failures to xmpp server
+    name: job that pushes test failures to xmpp
     steps:
       - name: Run tests
         run: |
