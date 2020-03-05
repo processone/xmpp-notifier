@@ -1,7 +1,7 @@
 # action.yml
-name: 'Hello World'
-description: 'Custom greet with golang program'
-author: 'Someone'
+name: 'XMPP Notifier'
+description: 'Send notifications using XMPP'
+author: 'ProcessOne'
 runs:
   using: 'docker'
   image: 'Dockerfile'
