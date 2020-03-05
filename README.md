@@ -1,4 +1,4 @@
-# Xmpp-notifier
+# XMPP Notifier Action
 Github action to notify xmpp users when some events occur on a given repository.  
 
 You can either notify a single user or send a message to a channel.
