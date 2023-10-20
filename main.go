@@ -1,12 +1,13 @@
 package main
 
 import (
-	"gosrc.io/xmpp"
-	"gosrc.io/xmpp/stanza"
 	"log"
 	"os"
 	"strconv"
 	"strings"
+
+	"gosrc.io/xmpp"
+	"gosrc.io/xmpp/stanza"
 )
 
 const (
@@ -43,16 +44,13 @@ func main() {
 		Insecure:     false,
 	}
 	router := xmpp.NewRouter()
-	client, err := xmpp.NewClient(config, router, errorHandler)
+	client, err := xmpp.NewClient(&config, router, errorHandler)
 
 	if err != nil {
 		log.Fatalf("%+v", err)
 	}
 
-	err = client.Connect()
-	if err != nil {
-		panic(err)
-	}
+	errorHandler(client.Connect())
 
 	// Check if we want to send to a chat room or a single user
 	// Send presence to connect to chat room, if specified
@@ -78,10 +76,7 @@ func main() {
 			panic(err)
 		}
 		// Sending room presence
-		err = joinMUC(client, clientJid)
-		if err != nil {
-			panic(err)
-		}
+		errorHandler(joinMUC(client, clientJid))
 	} else {
 		clientJid, err = stanza.NewJid(os.Args[recipient])
 		if err != nil {
@@ -91,22 +86,22 @@ func main() {
 
 	// Send github message to recipient or chat room
 	m := stanza.Message{Attrs: stanza.Attrs{To: clientJid.Bare(), Type: getMessageType(isRecipientRoom)}, Body: os.Args[message]}
-	err = client.Send(m)
-	if err != nil {
-		panic(err)
-	}
+	errorHandler(client.Send(m))
 
 	// After sending the action message, let's disconnect from the chat room if we were connected to one.
 	if isRecipientRoom {
-		leaveMUC(client, clientJid)
+		errorHandler(leaveMUC(client, clientJid))
 	}
+
 	// And disconnect from the server
-	client.Disconnect()
+	errorHandler(client.Disconnect())
 }
 
 // errorHandler is the client error handler
 func errorHandler(err error) {
-	panic(err)
+	if err != nil {
+		panic(err)
+	}
 }
 
 // joinMUC builds a presence stanza to request joining a chat room
