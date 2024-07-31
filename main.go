@@ -43,7 +43,7 @@ func main() {
 		Insecure:     false,
 	}
 	router := xmpp.NewRouter()
-	client, err := xmpp.NewClient(config, router, errorHandler)
+	client, err := xmpp.NewClient(&config, router, errorHandler)
 
 	if err != nil {
 		log.Fatalf("%+v", err)
